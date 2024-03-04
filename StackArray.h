@@ -9,7 +9,7 @@ class StackArray : public Stack<T>
 public:
     StackArray() = delete;
     StackArray(size_t size) {
-        if (size < 0) {
+        if (size <= 0) {
             throw WrongStackSize();
         }
         try
@@ -40,6 +40,10 @@ public:
         return *this;
     };
 
+    size_t getSize() {
+        return m_nowSize;
+    }
+
     StackArray& operator=(StackArray&& other) {
         if (this != &other) {
             delete[] m_array; // Освобождаем текущий массив
@@ -56,7 +60,7 @@ public:
     void push(const T& e) {
         if (m_nowSize == m_size)
         {
-            throw WrongStackSize();
+            throw StackOverflow();
         }
         m_array[m_nowSize] = e;
         m_nowSize += 1;
@@ -73,6 +77,12 @@ public:
     bool isEmpty() {
         return (m_nowSize == 0);
     };
+    T top() {
+        if (isEmpty()) {
+            throw WrongStackSize();
+        }
+        return m_array[0];
+    }
 
 private:
     T* m_array;
